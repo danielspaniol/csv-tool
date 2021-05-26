@@ -107,12 +107,28 @@ function deserialize(csv) {
     return cols;
 }
 
+function clearResult() {
+    let resultEl = document.getElementById("results");
+    resultEl.innerHTML = "";
+}
+
 function addOwnersResult(fileName, owners, numTs, numTsPerOwner) {
     let resultEl = document.getElementById("results");
     let [fileEl, fileListEl] = createFileEntry(fileName + " (" + numTs + " t)");
 
     for (let o of owners) {
         fileListEl.appendChild(createOwnerEntry(o, numTsPerOwner[o] || "0"));
+    }
+
+    resultEl.appendChild(fileEl);
+}
+
+function addEstatesResult(fileName, estates) {
+    let resultEl = document.getElementById("results");
+    let [fileEl, fileListEl] = createFileEntry(fileName + " (" + estates.size + " Flurstücke)");
+
+    for (let e of estates) {
+        fileListEl.appendChild(createEstateEntry(e));
     }
 
     resultEl.appendChild(fileEl);
@@ -133,17 +149,36 @@ function createOwnerEntry(owner, numTs) {
     return nameDOM;
 }
 
+function createEstateEntry(estate) {
+    var nameDOM = document.createElement("li");
+    nameDOM.appendChild(document.createTextNode(estate));
+    return nameDOM;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // LOGIC
 ////////////////////////////////////////////////////////////////////////////////
 
-function listOwners() {
+function traverseContent(fn) {
+    clearResult();
+
     let doneFiles = 0;
     let totalFiles = contents.length;
 
     showBusyIndicator(totalFiles);
 
     for (let file of contents) {
+        fn(file)
+        ++doneFiles;
+        updateDoneCount(doneFiles);
+        if (doneFiles == totalFiles) {
+            setTimeout(hideBusyIndicator, 500);
+        }
+    }
+}
+
+function listOwners() {
+    traverseContent(function (file) {
         let owners = new Set();
 
         let numTs = 0;
@@ -162,17 +197,23 @@ function listOwners() {
         }
 
         addOwnersResult(file.name, owners, numTs, numTsPerOwner)
-
-        ++doneFiles;
-        updateDoneCount(doneFiles);
-        if (doneFiles == totalFiles) {
-            setTimeout(hideBusyIndicator, 500);
-        }
-    }
-
+    });
 }
 
 function listEstates() {
+    traverseContent(function (file) {
+        let estates = new Set();
 
+        for (let row of file.content) {
+            let id = row[ID_IDX];
+            let [id1, id2, _] = id.split('-');
+
+            id1 = id1.replace('t', '');
+
+            estates.add(id1 + '-' + id2);
+        }
+
+        addEstatesResult(file.name, estates);
+    });
 }
 

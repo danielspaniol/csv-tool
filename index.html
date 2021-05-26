@@ -9,7 +9,7 @@
     <input id="upload" type="file" multiple onchange="readFiles()" />
 
     <button type="button" onclick="listOwners()">Eigentümer auflisten</button>
-    <button type="button" onclick="alert('not implemented')">Flurstücke auflisten</button>
+    <button type="button" onclick="listEstates()">Flurstücke auflisten</button>
 
     <div class="upload-indicator__background upload-indicator__background--inactive">
         <div class="upload-indicator">
@@ -21,9 +21,7 @@
         </div>
     </div>
 
-    <ul id="results" class="results">
-
-    </ul>
+    <ul id="results" class="results"> </ul>
 
     <script src="script.js"></script>
 </body>
