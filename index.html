@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html>
 
-<head></head>
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
 
 <body>
-    <input id="upload" type="file" multiple />
-    <button type="button" onclick="handleFiles()">Do work</button>
+    <input id="upload" type="file" multiple onchange="readFiles()" />
 
-    <ul id="results"></ul>
+    <button type="button" onclick="listOwners()">Eigentümer auflisten</button>
+    <button type="button" onclick="alert('not implemented')">Flurstücke auflisten</button>
+
+    <div class="upload-indicator__background upload-indicator__background--inactive">
+        <div class="upload-indicator">
+            Liest <span class="upload-indicator__total-count"></span> Dateien ein...
+            <div>
+                <span class="upload-indicator__done-count"></span> von <span
+                    class="upload-indicator__total-count"></span> fertig.
+            </div>
+        </div>
+    </div>
+
+    <ul id="results" class="results">
+
+    </ul>
 
     <script src="script.js"></script>
 </body>
