@@ -24,6 +24,12 @@ let BUSY_INDICATOR_INACTIVE_CLASS = "upload-indicator__background--inactive";
 let TOTAL_COUNT_CLASS = "upload-indicator__total-count";
 let DONE_COUNT_CLASS = "upload-indicator__done-count";
 
+let FILE_RESULT_CLASS = "file-result";
+let FILE_RESULT_HIDE_CLASS = "file-result--hidden";
+
+let RETRACT_TEXT = "^";
+let EXPAND_TEXT = "v";
+
 function showBusyIndicator(totalFiles) {
     updateTotalCount(totalFiles);
     updateDoneCount(0);
@@ -136,9 +142,25 @@ function addEstatesResult(fileName, estates) {
 
 function createFileEntry(fileName) {
     let nameDOM = document.createElement("li");
-    nameDOM.appendChild(document.createTextNode(fileName));
     let listDOM = document.createElement("ul");
+    let buttonDOM = document.createElement('button');
+
+    buttonDOM.innerHTML = RETRACT_TEXT;
+    buttonDOM.onclick = function () {
+        if (buttonDOM.innerHTML === EXPAND_TEXT) {
+            buttonDOM.innerHTML = RETRACT_TEXT;
+            nameDOM.classList.remove(FILE_RESULT_HIDE_CLASS);
+        } else {
+            buttonDOM.innerHTML = EXPAND_TEXT;
+            nameDOM.classList.add(FILE_RESULT_HIDE_CLASS);
+        }
+    };
+
+    nameDOM.appendChild(document.createTextNode(fileName));
+    nameDOM.appendChild(buttonDOM)
     nameDOM.appendChild(listDOM);
+
+    nameDOM.classList.add(FILE_RESULT_CLASS);
 
     return [nameDOM, listDOM];
 }
