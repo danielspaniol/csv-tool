@@ -76,17 +76,20 @@ function readFiles() {
     let doneFiles = 0;
     let totalFiles = el.files.length;
 
+    contents = [];
+    clearResult();
+
     showBusyIndicator(totalFiles);
 
     for (var f of el.files) {
-        readFile(f, function (name, content) {
+        readFile(f, function(name, content) {
             contents.push({ name, content });
             ++doneFiles;
 
             updateDoneCount(doneFiles);
 
             if (doneFiles == totalFiles) {
-                contents.sort(function (a, b) { return a.name.localeCompare(b.name) });
+                contents.sort(function(a, b) { return a.name.localeCompare(b.name) });
                 setTimeout(hideBusyIndicator, 500);
             }
         });
@@ -96,7 +99,7 @@ function readFiles() {
 function readFile(file, callback) {
     let reader = new FileReader();
     reader.fileName = file.name;
-    reader.onload = function (e) {
+    reader.onload = function(e) {
         let csv = e.target.result;
         let content = deserialize(csv);
         callback(e.target.fileName, content);
@@ -107,8 +110,8 @@ function readFile(file, callback) {
 function deserialize(csv) {
     csv = csv || "";
 
-    let rows = csv.split("\n").filter(function (row) { return row && row.length > 0; });
-    let cols = rows.map(function (row) { return row.split(";") });
+    let rows = csv.split("\n").filter(function(row) { return row && row.length > 0; });
+    let cols = rows.map(function(row) { return row.split(";") });
 
     return cols;
 }
@@ -146,7 +149,7 @@ function createFileEntry(fileName) {
     let buttonDOM = document.createElement('button');
 
     buttonDOM.innerHTML = RETRACT_TEXT;
-    buttonDOM.onclick = function () {
+    buttonDOM.onclick = function() {
         if (buttonDOM.innerHTML === EXPAND_TEXT) {
             buttonDOM.innerHTML = RETRACT_TEXT;
             nameDOM.classList.remove(FILE_RESULT_HIDE_CLASS);
@@ -191,7 +194,7 @@ function traverseContent(fn) {
 
     for (let file of contents) {
         fn(file)
-        ++doneFiles;
+            ++doneFiles;
         updateDoneCount(doneFiles);
         if (doneFiles == totalFiles) {
             setTimeout(hideBusyIndicator, 500);
@@ -200,7 +203,7 @@ function traverseContent(fn) {
 }
 
 function listOwners() {
-    traverseContent(function (file) {
+    traverseContent(function(file) {
         let owners = new Set();
 
         let numTs = 0;
@@ -223,7 +226,7 @@ function listOwners() {
 }
 
 function listEstates() {
-    traverseContent(function (file) {
+    traverseContent(function(file) {
         let estates = new Set();
 
         for (let row of file.content) {
@@ -238,4 +241,3 @@ function listEstates() {
         addEstatesResult(file.name, estates);
     });
 }
-
