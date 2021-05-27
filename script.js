@@ -134,7 +134,7 @@ function addOwnersResult(fileName, owners, numTs, numTsPerOwner) {
 
 function addEstatesResult(fileName, estates) {
     let resultEl = document.getElementById("results");
-    let [fileEl, fileListEl] = createFileEntry(fileName + " (" + estates.length + " Flurstücke)");
+    let [fileEl, fileListEl] = createFileEntry(fileName + " (" + estates.length + " Buchungsblätter)");
 
     for (let e of estates) {
         fileListEl.appendChild(createEstateEntry(e));
