@@ -134,7 +134,7 @@ function addOwnersResult(fileName, owners, numTs, numTsPerOwner) {
 
 function addEstatesResult(fileName, estates) {
     let resultEl = document.getElementById("results");
-    let [fileEl, fileListEl] = createFileEntry(fileName + " (" + estates.size + " Flurstücke)");
+    let [fileEl, fileListEl] = createFileEntry(fileName + " (" + estates.length + " Flurstücke)");
 
     for (let e of estates) {
         fileListEl.appendChild(createEstateEntry(e));
@@ -238,6 +238,8 @@ function listEstates() {
             estates.add(id1 + '-' + id2);
         }
 
-        addEstatesResult(file.name, estates);
+        var sorted = Array.from(estates);
+        sorted.sort();
+        addEstatesResult(file.name, sorted);
     });
 }
